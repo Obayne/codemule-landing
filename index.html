@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>codemule – Let codemule carry the load</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="codemule is your AI coding workhorse – a tireless assistant that helps you build, refactor, and ship code faster."
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-soft: #0b1020;
+      --bg-alt: #060814;
+      --accent: #4f46e5;
+      --accent-soft: rgba(79, 70, 229, 0.15);
+      --accent-2: #22d3ee;
+      --text: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border-subtle: rgba(148, 163, 184, 0.3);
+      --danger: #f97373;
+      --radius-lg: 18px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 22px 45px rgba(15, 23, 42, 0.75);
+      --max-width: 1120px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #111827, #020617 60%);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 20px 16px 48px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 8px 0 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 30%;
+      background: radial-gradient(circle at 30% 20%, #22d3ee, #4f46e5 55%, #020617 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.7);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-icon::before,
+    .brand-icon::after {
+      content: "";
+      position: absolute;
+      width: 65%;
+      height: 2px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.95);
+    }
+
+    .brand-icon::before {
+      transform: rotate(28deg) translateY(-2px);
+      top: 12px;
+      left: 4px;
+    }
+
+    .brand-icon::after {
+      transform: rotate(-20deg) translateY(3px);
+      bottom: 8px;
+      right: 0;
+      width: 55%;
+    }
+
+    .brand-icon-mark {
+      position: relative;
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo,
+        Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+      color: #e5e7eb;
+      text-shadow: 0 0 4px rgba(15, 23, 42, 0.7);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .brand-name {
+      font-family: "Sora", system-ui, sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      font-size: 18px;
+      text-transform: lowercase;
+    }
+
+    .brand-tagline {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .pill {
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: rgba(15, 23, 42, 0.6);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+    }
+
+    .pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.9);
+    }
+
+    .nav-cta {
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      background: linear-gradient(135deg, #111827, #020617);
+      color: var(--text);
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+
+    .nav-cta span.icon {
+      font-size: 15px;
+    }
+
+    main {
+      flex: 1;
+      padding-top: 6px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(0, 1.1fr);
+      gap: 32px;
+      align-items: center;
+    }
+
+    @media (max-width: 880px) {
+      .hero-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      header {
+        flex-wrap: wrap;
+      }
+
+      .nav-right {
+        justify-content: flex-end;
+        flex: 1;
+      }
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.7);
+      color: var(--text-muted);
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .hero-eyebrow span.tag {
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(79, 70, 229, 0.12);
+      color: #c7d2fe;
+      font-size: 11px;
+    }
+
+    .hero-title {
+      font-family: "Sora", system-ui, sans-serif;
+      font-size: clamp(30px, 4vw, 40px);
+      line-height: 1.1;
+      letter-spacing: 0.03em;
+      margin-bottom: 12px;
+    }
+
+    .hero-highlight {
+      background: linear-gradient(120deg, #22d3ee, #a855f7);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin-bottom: 18px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .btn-primary {
+      padding: 9px 18px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: radial-gradient(circle at 0% 0%, #22d3ee, #4f46e5);
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 12px 30px rgba(79, 70, 229, 0.6);
+      text-decoration: none;
+    }
+
+    .btn-primary span.icon {
+      font-size: 18px;
+    }
+
+    .btn-ghost {
+      padding: 9px 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.75);
+      color: var(--text-muted);
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+
+    .hero-footnote {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .hero-footnote strong {
+      color: #e5e7eb;
+    }
+
+    .card {
+      border-radius: var(--radius-lg);
+      background: radial-gradient(circle at top, #020617, #020617 40%, #020617 90%);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-soft);
+      padding: 18px 18px 18px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .card-badge {
+      font-size: 11px;
+      color: #bbf7d0;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.13);
+      border: 1px solid rgba(22, 163, 74, 0.5);
+    }
+
+    .stack {
+      display: grid;
+      gap: 10px;
+    }
+
+    .mini-panel {
+      border-radius: 12px;
+      border: 1px solid rgba(55, 65, 81, 0.8);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.1), #020617);
+      padding: 10px 11px;
+    }
+
+    .mini-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .mini-main {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+
+    .pill-small {
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(79, 70, 229, 0.14);
+      color: #c7d2fe;
+      font-size: 11px;
+    }
+
+    .metric-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-top: 6px;
+      color: var(--text-muted);
+    }
+
+    .metric-row strong {
+      color: var(--text);
+      font-size: 13px;
+    }
+
+    .features {
+      margin-top: 40px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    @media (max-width: 880px) {
+      .features {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .feature-card {
+      border-radius: 16px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: linear-gradient(145deg, #020617, #020617);
+      padding: 14px 14px 13px;
+    }
+
+    .feature-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: rgba(79, 70, 229, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .feature-title {
+      font-size: 14px;
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .feature-text {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .footer {
+      border-top: 1px solid rgba(30, 64, 175, 0.4);
+      margin-top: 32px;
+      padding-top: 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .footer a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 12px;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="shell">
+      <header>
+        <div class="brand">
+          <div class="brand-icon">
+            <span class="brand-icon-mark">&lt;/&gt;</span>
+          </div>
+          <div class="brand-text">
+            <div class="brand-name">codemule</div>
+            <div class="brand-tagline">AI coding workhorse for real projects</div>
+          </div>
+        </div>
+        <div class="nav-right">
+          <div class="pill">
+            <span class="pill-dot"></span>
+            <span>Phase 1 – dev assistant only</span>
+          </div>
+          <a href="#waitlist" class="nav-cta">
+            <span>Join waitlist</span>
+            <span class="icon">→</span>
+          </a>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero">
+          <div class="hero-grid">
+            <div>
+              <div class="hero-eyebrow">
+                <span class="tag">early access</span>
+                <span>Built for solo devs & small teams</span>
+              </div>
+              <h1 class="hero-title">
+                Let <span class="hero-highlight">codemule</span> carry your
+                coding workload.
+              </h1>
+              <p class="hero-text">
+                codemule is your tireless AI coding partner. Describe the change you want,
+                upload your project, and let codemule handle the boilerplate, refactors, and
+                glue code—while you stay in control of the important decisions.
+              </p>
+              <div class="hero-actions" id="waitlist">
+                <a href="mailto:codemule@yourdomain.com?subject=Codemule%20Early%20Access"
+                   class="btn-primary">
+                  <span>Request early access</span>
+                  <span class="icon">✉</span>
+                </a>
+                <a href="#how-it-works" class="btn-ghost">
+                  <span>See how Phase 1 works</span>
+                </a>
+              </div>
+              <p class="hero-footnote">
+                <strong>Phase 1 focus:</strong> repo-aware code edits, feature scaffolding,
+                and refactors. No multi-agent “AI team” yet—just a dependable workhorse.
+              </p>
+            </div>
+            <div>
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">Snapshot · Phase 1 Codemule</div>
+                  <div class="card-badge">MVP in progress</div>
+                </div>
+                <div class="stack">
+                  <div class="mini-panel">
+                    <div class="mini-label">You say:</div>
+                    <div class="mini-main">
+                      <span>“Add a /billing endpoint and basic tests.”</span>
+                      <span class="pill-small">natural language</span>
+                    </div>
+                    <div class="metric-row">
+                      <span>codemule responds with:</span>
+                      <span><strong>routes · tests · wiring</strong></span>
+                    </div>
+                  </div>
+
+                  <div class="mini-panel" id="how-it-works">
+                    <div class="mini-label">Phase 1 workflow</div>
+                    <div class="mini-main">
+                      <span>Upload project → guide codemule → download diff</span>
+                    </div>
+                    <div class="metric-row">
+                      <span>Ideal for:</span>
+                      <span><strong>solo builders · indie SaaS</strong></span>
+                    </div>
+                  </div>
+
+                  <div class="mini-panel">
+                    <div class="mini-label">Roadmap</div>
+                    <div class="mini-main">
+                      <span>Phase 2: multi-agent AI “dev team”</span>
+                      <span class="pill-small">coming later</span>
+                    </div>
+                    <div class="metric-row">
+                      <span>Today’s promise:</span>
+                      <span><strong>less grind, more shipping</strong></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <section class="features">
+            <article class="feature-card">
+              <div class="feature-icon">⚙️</div>
+              <h2 class="feature-title">Repo-aware edits</h2>
+              <p class="feature-text">
+                Point codemule at your existing project. It learns the structure, then
+                makes targeted changes instead of dumping disconnected snippets.
+              </p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon">📦</div>
+              <h2 class="feature-title">Feature scaffolding</h2>
+              <p class="feature-text">
+                Describe a feature in plain language and get routes, handlers, and basic
+                tests scaffolded to match your stack and conventions.
+              </p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon">🧠</div>
+              <h2 class="feature-title">You stay in control</h2>
+              <p class="feature-text">
+                codemule doesn’t auto-merge into your repo. You review diffs,
+                keep what you like, and stay the final decision-maker on every change.
+              </p>
+            </article>
+          </section>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <span>© <span id="year"></span> codemule. All rights reserved.</span>
+        <div class="footer-links">
+          <a href="mailto:codemule@yourdomain.com">Contact</a>
+          <a href="#">Privacy (coming soon)</a>
+          <a href="#">Terms (coming soon)</a>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
